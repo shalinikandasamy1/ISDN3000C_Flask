@@ -7,7 +7,7 @@ PHOTO_DIR = "photos"
 if not os.path.exists(PHOTO_DIR):
     os.makedirs(PHOTO_DIR)
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)  # Open default camera
 
 if not cap.isOpened():
     print("Error: Could not open camera")
@@ -18,20 +18,18 @@ def get_next_photo_number(date_prefix):
     numbers = []
     for f in existing_files:
         try:
-            num = int(f[len(date_prefix)+1:len(date_prefix)+4])
+            # Extract the three-digit photo number after date_ prefix
+            num = int(f[len(date_prefix) + 1 : len(date_prefix) + 4])
             numbers.append(num)
         except:
             pass
-    if numbers:
-        return max(numbers) + 1
-    else:
-        return 1
+    return max(numbers) + 1 if numbers else 1
 
 def capture_photo():
     ret, frame = cap.read()
     if not ret:
         print("Failed to capture frame")
-        return False
+        return False, ''
 
     now = datetime.now()
     date_str = now.strftime("%Y%m%d")
@@ -42,14 +40,7 @@ def capture_photo():
 
     cv2.imwrite(filepath, frame)
     print(f"Saved photo: {filepath}")
-    return True
+    return True, filename
 
-if __name__ == "__main__":
-    while True:
-        input("Press Enter to take a photo, or type 'q' then Enter to quit: ")
-        if input().lower() == 'q':
-            break
-        capture_photo()
-
+def close_camera():
     cap.release()
-    print("Camera released. Exiting.")
