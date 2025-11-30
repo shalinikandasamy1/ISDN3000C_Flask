@@ -1,0 +1,5 @@
+to connect to hotspot 
+
+sudo systemctl enable hostapd
+sudo systemctl enable isc-dhcp-server
+
