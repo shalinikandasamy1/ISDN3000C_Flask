@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Photos grouped by person</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 20px; }
+      h1 { margin-bottom: 20px; }
+      .person-block { margin-bottom: 40px; }
+      .person-block h2 { margin-bottom: 10px; }
+      .thumbs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .thumbs a {
+        display: inline-block;
+        border: 1px solid #ccc;
+        padding: 4px;
+        background: #fafafa;
+      }
+      .thumbs img {
+        height: 150px;
+        object-fit: cover;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Photos grouped by person</h1>
+
+    {% for person, files in groups.items() %}
+      <div class="person-block">
+        <h2>{{ person }}</h2>
+        <div class="thumbs">
+          {% for fname in files %}
+            <a href="/photos/{{ fname }}" target="_blank">
+              <img src="/photos/{{ fname }}" alt="{{ fname }}">
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </body>
+</html>

@@ -4,28 +4,24 @@ import os
 import signal
 import sys
 import threading
-import capture_photos  # Your capture module
-import bw_filter       # Black & white filter module
-import vintage_filter  # Vintage filter module
+import capture_photos
+import bw_filter
+import vintage_filter
+import analyze_photo   # face analysis
 
-BUTTON_CAPTURE = 13  # Button 1: capture photo (Pin 13, GPIO 27)
-LED_CAPTURE = 31     # LED 1: capture indicator (Pin 31, GPIO 6)
+BUTTON_CAPTURE = 13   # Pin 13, GPIO27
+LED_CAPTURE   = 31    # Pin 31, GPIO6
 
-BUTTON_FILTER = 29   # Button 2: filter button (Pin 29, GPIO 5)
-LED_BW = 36          # LED 2: B&W filter indicator (Pin 36, GPIO 16)
-LED_VINTAGE = 37     # LED 3: Vintage filter indicator (Pin 37, GPIO 26)
+BUTTON_FILTER = 29    # Pin 29, GPIO5
+LED_BW        = 36    # Pin 36, GPIO16
+LED_VINTAGE   = 37    # Pin 37, GPIO26
 
-PHOTO_DIR = "photos"
-PHOTO_BW_DIR = "photos_bw"
+PHOTO_DIR         = "photos"
+PHOTO_BW_DIR      = "photos_bw"
 PHOTO_VINTAGE_DIR = "photos_vintage"
 
-# Ensure directories exist
-if not os.path.exists(PHOTO_DIR):
-    os.makedirs(PHOTO_DIR)
-if not os.path.exists(PHOTO_BW_DIR):
-    os.makedirs(PHOTO_BW_DIR)
-if not os.path.exists(PHOTO_VINTAGE_DIR):
-    os.makedirs(PHOTO_VINTAGE_DIR)
+for d in (PHOTO_DIR, PHOTO_BW_DIR, PHOTO_VINTAGE_DIR):
+    os.makedirs(d, exist_ok=True)
 
 exit_flag = False
 
@@ -40,8 +36,8 @@ def signal_handler(sig, frame):
     print(f"\nReceived signal {sig}.")
     cleanup_and_exit()
 
-signal.signal(signal.SIGINT, signal_handler)   # Ctrl+C
-signal.signal(signal.SIGTERM, signal_handler)  # Termination signal
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
 
 def listen_for_exit():
     global exit_flag
@@ -54,8 +50,8 @@ def listen_for_exit():
 
 def main():
     global exit_flag
-    GPIO.setmode(GPIO.BOARD)
 
+    GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_CAPTURE, GPIO.IN)
     GPIO.setup(BUTTON_FILTER, GPIO.IN)
     GPIO.setup(LED_CAPTURE, GPIO.OUT)
@@ -90,8 +86,13 @@ def main():
                 if success:
                     last_captured_filename = filename
                     print(f"Saved {filename}")
+
                     GPIO.output(LED_CAPTURE, GPIO.HIGH)
-                    time.sleep(1)
+
+                    # AI face analysis
+                    analyze_photo.analyze_photo(filename)
+
+                    time.sleep(5)
                     GPIO.output(LED_CAPTURE, GPIO.LOW)
                 else:
                     print("Capture failed!")
@@ -101,11 +102,11 @@ def main():
             current_filter_state = GPIO.input(BUTTON_FILTER) == GPIO.HIGH
 
             if current_filter_state and not button_filter_last_state:
-                # Button just pressed: start timing
+                # Button just pressed
                 filter_button_press_time = time.time()
 
             if not current_filter_state and button_filter_last_state:
-                # Button just released: calculate press duration
+                # Button just released
                 duration = time.time() - filter_button_press_time if filter_button_press_time else 0
 
                 if last_captured_filename is None:
@@ -116,7 +117,7 @@ def main():
                         success = bw_filter.apply_bw_filter(os.path.basename(last_captured_filename))
                         if success:
                             GPIO.output(LED_BW, GPIO.HIGH)
-                            time.sleep(1)
+                            time.sleep(5)
                             GPIO.output(LED_BW, GPIO.LOW)
                         else:
                             print("Failed to apply B&W filter.")
@@ -125,7 +126,7 @@ def main():
                         success = vintage_filter.apply_vintage_filter(os.path.basename(last_captured_filename))
                         if success:
                             GPIO.output(LED_VINTAGE, GPIO.HIGH)
-                            time.sleep(1)
+                            time.sleep(5)
                             GPIO.output(LED_VINTAGE, GPIO.LOW)
                         else:
                             print("Failed to apply vintage filter.")
