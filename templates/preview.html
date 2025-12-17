@@ -106,10 +106,13 @@
         padding: 16px;
       }
 
+      /* Fixed 640x480 (4:3) preview box */
       .photo-inner {
-        width: 90%;
-        max-width: 360px;
-        aspect-ratio: 3 / 4;
+        width: 640px;
+        height: 480px;
+        max-width: 100%;
+        max-height: 100%;
+        aspect-ratio: 4 / 3;
         margin: 0 auto;
         border-radius: 18px;
         background: radial-gradient(circle at top, #020617, #00010a 70%);
@@ -118,7 +121,6 @@
         align-items: center;
         justify-content: center;
         overflow: hidden;
-        position: relative;
         color: var(--text-sub);
         font-size: 12px;
         text-align: center;
@@ -136,7 +138,7 @@
         border-radius: 18px;
         background: rgba(8, 25, 53, 0.96);
         border: 1px solid rgba(148, 163, 184, 0.4);
-        padding: 16px 18px;
+        padding: 16px 18px 14px;
         display: flex;
         flex-direction: column;
       }
@@ -170,13 +172,15 @@
 
       .button-row {
         display: flex;
-        gap: 10px;
-        margin-top: auto;
+        justify-content: center;   /* center in panel */
+        gap: 18px;
+        margin-top: 12px;
+        margin-bottom: 6px;
       }
 
       .btn {
-        flex: 1;
-        padding: 10px 14px;
+        min-width: 150px;
+        padding: 10px 16px;
         border-radius: 999px;
         border: 1px solid rgba(148, 163, 184, 0.7);
         background: radial-gradient(circle at top, rgba(148, 163, 255, 0.25), rgba(15, 23, 42, 0.95));
@@ -192,7 +196,7 @@
       }
 
       .footer-line {
-        margin-top: 10px;
+        margin-top: auto;
         font-size: 11px;
         color: #d1e0ff;
         text-align: center;
@@ -235,7 +239,7 @@
 
           {% if max_reached %}
           <div class="limit-message">
-            You’ve reached the maximum of 3 retakes. Please tap Continue to move on.
+            You’ve reached the maximum of {{ max_retakes }} retakes. Please tap Continue to move on.
           </div>
           {% endif %}
 

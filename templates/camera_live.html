@@ -9,7 +9,6 @@
         --bg: #041124;
         --panel: #071a33;
         --accent: #0ea5e9;
-        --accent-soft: rgba(14, 165, 233, 0.4);
         --text-main: #f9fbff;
         --text-sub: #c3d0ea;
       }
@@ -42,7 +41,7 @@
       }
 
       .frame {
-        width: min(96vw, 960px);   /* tuned for 1024x768 */
+        width: min(96vw, 960px);
         height: min(90vh, 640px);
         border-radius: 24px;
         padding: 18px 22px 20px;
@@ -84,9 +83,7 @@
         gap: 10px;
       }
 
-      .logo-left img {
-        height: 26px;
-      }
+      .logo-left img { height: 26px; }
 
       .logo-text {
         font-size: 11px;
@@ -133,10 +130,22 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: rgba(226, 232, 240, 0.8);
-        font-size: 14px;
-        text-align: center;
         padding: 12px;
+      }
+
+      .preview-panel-inner {
+        width: 640px;
+        height: 480px;
+        max-width: 100%;
+        max-height: 100%;
+        aspect-ratio: 4 / 3;
+      }
+
+      #preview {
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+        object-fit: cover;
       }
 
       .side-panel {
@@ -163,7 +172,7 @@
       }
 
       .step-list {
-        margin-top: 4px;
+        margin-top: 25px;
         display: flex;
         flex-direction: column;
         gap: 8px;
@@ -182,11 +191,6 @@
         filter: drop-shadow(0 4px 8px rgba(15, 23, 42, 0.8));
       }
 
-      .step-label-strong {
-        font-family: "Georgia", "Times New Roman", serif;
-        color: var(--accent);
-      }
-
       .footer-text {
         margin-top: 20px;
         font-size: 11px;
@@ -194,23 +198,38 @@
         text-align: right;
       }
 
- .pose-ideas-block {
-  margin: 12px auto 10px;   /* smaller margins */
-  text-align: center;
-}
+      .pose-ideas-block {
+        margin: 12px auto 10px;
+        text-align: center;
+      }
 
-.pose-ideas-img {
-  width: 55%;               /* was 70%; make it narrower */
-  max-width: 210px;         /* hard cap so it can’t explode */
-  border-radius: 14px;
-}
+      .pose-ideas-img {
+        width: 55%;
+        max-width: 210px;
+        border-radius: 14px;
+      }
 
-.pose-ideas-caption {
-  margin-top: 4px;
-  font-size: 12px;
-}
+      .pose-ideas-caption {
+        margin-top: 4px;
+        font-size: 12px;
+      }
 
+      .capture-btn {
+        margin-top: 30px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        border: none;
+        background: var(--accent);
+        color: #0b1120;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(56, 189, 248, 0.4);
+      }
 
+      .capture-btn img { height: 22px; }
     </style>
   </head>
   <body>
@@ -225,12 +244,13 @@
         </div>
       </div>
 
-      <div class="title-bar">Pose for your photo! </div>
+      <div class="title-bar">Pose for your photo!</div>
 
       <div class="content-row">
         <div class="preview-panel">
-          Live camera preview appears on the device screen.<br>
-          Hold your pose and use the capture button when you’re ready.
+          <div class="preview-panel-inner">
+            <video id="preview" autoplay playsinline muted></video>
+          </div>
         </div>
 
         <div class="side-panel">
@@ -240,28 +260,52 @@
               Get ready and hold your favourite pose.
             </div>
 
+            <div style="height: 22px;"></div>
 
-        <div class="pose-ideas-block">
-             <img class="pose-ideas-img"
-                  src="{{ url_for('static', filename='img/poseideas.png') }}"
-                  alt="Pose ideas">
-             <div class="pose-ideas-caption">
-                  Here is our collection of posing ideas.
-             </div>
-        </div>
+            <div class="hint-title" style="font-size:14px; color:#fbbf24;">
+              Important notice
+            </div>
+            <div class="hint-text">
+              Press the button located physically on my head
+              <strong>at the same time</strong> as the Capture button below
+              to take your photo.
+            </div>
+
+           
 
             <div class="step-list">
               <div class="step-item">
                 <img src="{{ url_for('static', filename='img/capture_button.png') }}" alt="Capture button">
-                <div><span class="hint-text">Press this button to capture your photo. </span> </div>
+                <div class="hint-text">
+                  Press this physical button <strong>together</strong> with the capture button below.
+                </div>
               </div>
-              
-          
+            </div>
+
+            <button class="capture-btn" id="capture-btn">
+              <img src="{{ url_for('static', filename='img/camera_icon.png') }}" alt="">
+              Capture
+            </button>
+          </div>
+
           <div class="footer-text">
-            Not satisfied? You can retake your photo on the next screen.
+            Not satisfied? You can retake your photo.
           </div>
         </div>
       </div>
     </div>
+
+    <script>
+      const video = document.getElementById('preview');
+
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => { video.srcObject = stream; })
+        .catch(err => { console.error('Camera error:', err); });
+
+      document.getElementById('capture-btn').onclick = () => {
+        try { video.pause(); } catch (e) {}
+        window.location.href = "/trigger_capture";
+      };
+    </script>
   </body>
 </html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Generating your photo…</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        background:#020b1f;
+        color:white;
+        text-align:center;
+        margin:0;
+        height:100vh;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+      }
+      .title { font-size:26px; margin-bottom:10px; }
+      .subtitle { font-size:16px; color:#cbd5f5; margin-bottom:30px; }
+      .count { font-size:80px; margin-bottom:20px; }
+      .bar { width:60%; max-width:500px; height:8px; background:#233; border-radius:4px; overflow:hidden; }
+      .fill { width:0; height:100%; background:#4fd1ff; transition:width 10s linear; }
+    </style>
+  </head>
+  <body>
+    <div class="title">Image captured!</div>
+    <div class="subtitle">Generating your photo preview…</div>
+    <div class="count" id="count">10</div>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+
+    <script>
+      const countEl = document.getElementById('count');
+      const fillEl = document.getElementById('fill');
+      let n = 10;
+      fillEl.style.width = "100%";
+
+      const timer = setInterval(() => {
+        n -= 1;
+        if (n <= 0) {
+          clearInterval(timer);
+          window.location.href = "/preview";
+        } else {
+          countEl.textContent = n;
+        }
+      }, 1000);
+    </script>
+  </body>
+</html>
