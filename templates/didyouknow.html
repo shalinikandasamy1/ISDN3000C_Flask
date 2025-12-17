@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>HKUST Photo Booth – Did you know?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      :root {
+        --bg: #041124;
+        --panel: #071a33;
+        --text-main: #f9fbff;
+        --text-sub: #c3d0ea;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:
+          radial-gradient(circle at top, #0b2750 0, #041124 55%, #020712 100%);
+        color: var(--text-main);
+        font-family: "Roboto", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      }
+      .frame {
+        width: min(96vw, 960px);
+        height: min(90vh, 640px);
+        border-radius: 24px;
+        padding: 18px 22px 20px;
+        background:
+          radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 55%),
+          radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.16), transparent 55%),
+          #020815;
+        box-shadow:
+          0 24px 70px rgba(0, 0, 0, 0.9),
+          0 0 0 1px rgba(148, 163, 184, 0.28);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .title {
+        font-family: "Georgia", "Times New Roman", serif;
+        font-size: 22px;
+        margin-bottom: 12px;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: var(--text-sub);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="title">Did you know?</div>
+      <div class="subtitle">
+        This page is coming soon. Please continue the experience with our staff.
+      </div>
+    </div>
+  </body>
+</html>
