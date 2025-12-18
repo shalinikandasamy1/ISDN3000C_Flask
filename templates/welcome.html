@@ -9,7 +9,7 @@
         --bg: #041124;
         --card: #071a33;
         --blue: #0055a4;
-        --blue-soft: rgba(0, 85, 164, 0.35);
+        --blue-soft: rgba(0, 85, 164, 0.45);
         --gold: #f4c04a;
         --text-main: #f9fbff;
         --text-sub: #c3d0ea;
@@ -24,7 +24,9 @@
         align-items: center;
         justify-content: center;
         background:
-          radial-gradient(circle at top, #0a2246 0, #041124 55%, #020712 100%);
+          radial-gradient(circle at top, #0b2f72 0, #041124 55%, #020712 100%);
+        background-size: 260% 260%;
+        animation: bgShift 14s ease-in-out infinite alternate;
         color: var(--text-main);
         font-family: "Roboto", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
         overflow: hidden;
@@ -35,11 +37,12 @@
         position: fixed;
         inset: -60px;
         background:
-          radial-gradient(circle at 18% 0%, rgba(0, 119, 204, 0.22), transparent 60%),
-          radial-gradient(circle at 82% 100%, rgba(4, 120, 201, 0.22), transparent 55%);
-        opacity: 0.9;
+          radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.35), transparent 60%),
+          radial-gradient(circle at 85% 100%, rgba(129, 140, 248, 0.35), transparent 55%);
+        opacity: 0.95;
         pointer-events: none;
         z-index: -1;
+        mix-blend-mode: screen;
       }
 
       .card {
@@ -47,14 +50,15 @@
         padding: 26px 44px 30px;
         border-radius: 24px;
         background:
-          radial-gradient(circle at top left, rgba(0, 112, 192, 0.16), transparent 60%),
-          radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.12), transparent 55%),
+          radial-gradient(circle at top left, rgba(0, 112, 192, 0.26), transparent 60%),
+          radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.22), transparent 55%),
           var(--card);
         box-shadow:
-          0 24px 70px rgba(0, 0, 0, 0.9),
-          0 0 0 1px rgba(148, 163, 184, 0.25);
+          0 26px 80px rgba(0, 0, 0, 0.95),
+          0 0 0 1px rgba(148, 163, 184, 0.3);
         text-align: center;
         width: min(90vw, 640px);
+        animation: cardFloat 7s ease-in-out infinite alternate;
       }
 
       .card::before {
@@ -63,10 +67,10 @@
         inset: 1px;
         border-radius: 22px;
         background: linear-gradient(to bottom right,
-          rgba(148, 163, 255, 0.32),
+          rgba(148, 163, 255, 0.5),
           rgba(15, 23, 42, 0.9));
         mix-blend-mode: screen;
-        opacity: 0.5;
+        opacity: 0.6;
         pointer-events: none;
         z-index: -1;
       }
@@ -99,8 +103,9 @@
 
       .bird-block img {
         height: 40px;
-        opacity: 0.96;
-        filter: drop-shadow(0 6px 12px rgba(15, 23, 42, 0.9));
+        opacity: 0.98;
+        filter: drop-shadow(0 6px 14px rgba(15, 23, 42, 1));
+        animation: birdFloat 4.8s ease-in-out infinite alternate;
       }
 
       .title {
@@ -124,7 +129,7 @@
         padding: 5px 13px;
         border-radius: 999px;
         background: rgba(8, 25, 53, 0.96);
-        border: 1px solid rgba(148, 163, 184, 0.55);
+        border: 1px solid rgba(148, 163, 184, 0.65);
         font-size: 11px;
         color: #e2ebff;
         margin-bottom: 22px;
@@ -135,7 +140,7 @@
         height: 7px;
         border-radius: 999px;
         background: #22c55e;
-        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3);
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
       }
 
       .start-shell {
@@ -151,18 +156,25 @@
         border-radius: 999px;
         border: none;
         background:
-          radial-gradient(circle at 25% 0%, #dbeafe, #0ea5e9);
+          conic-gradient(from 210deg,
+            #e0f2fe,
+            #38bdf8,
+            #a5b4fc,
+            #e0f2fe);
         color: #02131e;
         font-size: 20px;
         font-weight: 600;
         cursor: pointer;
         box-shadow:
-          0 20px 50px rgba(14, 165, 233, 0.9),
+          0 22px 60px rgba(56, 189, 248, 1),
           0 0 0 1px rgba(15, 23, 42, 0.9);
         transition: transform 0.16s ease-out, box-shadow 0.16s ease-out;
         position: relative;
         overflow: hidden;
         font-family: "Roboto", -apple-system, system-ui, sans-serif;
+        animation:
+          buttonGlow 2.2s ease-in-out infinite,
+          hueRotate 10s linear infinite;
       }
 
       .start-btn::after {
@@ -170,21 +182,21 @@
         position: absolute;
         inset: 0;
         border-radius: inherit;
-        background: radial-gradient(circle at 30% 0%, rgba(255, 255, 255, 0.55), transparent 60%);
+        background: radial-gradient(circle at 30% 0%, rgba(255, 255, 255, 0.65), transparent 60%);
         mix-blend-mode: screen;
         opacity: 0.8;
         pointer-events: none;
       }
 
       .start-btn:hover {
-        transform: translateY(-1px) scale(1.02);
+        transform: translateY(-1px) scale(1.03);
         box-shadow:
-          0 26px 60px rgba(56, 189, 248, 1),
+          0 30px 70px rgba(56, 189, 248, 1),
           0 0 0 1px rgba(15, 23, 42, 1);
       }
 
       .start-btn:active {
-        transform: translateY(1px) scale(0.98);
+        transform: translateY(1px) scale(0.97);
       }
 
       .pulse-ring {
@@ -198,10 +210,10 @@
       }
 
       .pulse-ring:nth-child(2) {
-        width: 212px;
-        height: 212px;
+        width: 222px;
+        height: 222px;
         animation-delay: 0.45s;
-        opacity: 0.7;
+        opacity: 0.8;
       }
 
       .steps {
@@ -243,8 +255,35 @@
 
       @keyframes ring {
         0%   { transform: scale(0.86); opacity: 0.9; }
-        70%  { transform: scale(1.08); opacity: 0; }
-        100% { transform: scale(1.08); opacity: 0; }
+        70%  { transform: scale(1.12); opacity: 0; }
+        100% { transform: scale(1.12); opacity: 0; }
+      }
+
+      @keyframes bgShift {
+        0%   { background-position: 0% 0%; }
+        50%  { background-position: 50% 100%; }
+        100% { background-position: 100% 0%; }
+      }
+
+      @keyframes cardFloat {
+        0%   { transform: translateY(0px); }
+        100% { transform: translateY(-10px); }
+      }
+
+      @keyframes birdFloat {
+        0%   { transform: translateY(0px); }
+        100% { transform: translateY(-6px); }
+      }
+
+      @keyframes buttonGlow {
+        0%   { box-shadow: 0 18px 45px rgba(56, 189, 248, 0.7); }
+        50%  { box-shadow: 0 28px 70px rgba(129, 140, 248, 1); }
+        100% { box-shadow: 0 18px 45px rgba(56, 189, 248, 0.7); }
+      }
+
+      @keyframes hueRotate {
+        0%   { filter: hue-rotate(0deg); }
+        100% { filter: hue-rotate(40deg); }
       }
 
       @media (max-height: 820px) {

@@ -12,12 +12,11 @@
         --text-main: #f9fbff;
         --text-sub: #c3d0ea;
       }
-
       * { box-sizing: border-box; }
 
       body {
         margin: 0;
-        height: 100vh;
+        min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -29,9 +28,11 @@
 
       .frame {
         width: min(96vw, 960px);
-        height: min(90vh, 640px);
+        max-width: 960px;
+        height: min(86vh, 580px);
+        max-height: 580px;
         border-radius: 24px;
-        padding: 18px 22px 20px;
+        padding: 16px 20px 18px;
         background:
           radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 55%),
           radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.16), transparent 55%),
@@ -41,52 +42,53 @@
           0 0 0 1px rgba(148, 163, 184, 0.28);
         display: flex;
         flex-direction: column;
+        overflow: hidden;
       }
 
       .top-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
       }
 
       .logo-left {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
       }
 
-      .logo-left img { height: 26px; }
+      .logo-left img { height: 22px; }
 
       .logo-text {
-        font-size: 11px;
+        font-size: 10px;
         letter-spacing: 0.14em;
         text-transform: uppercase;
         color: var(--text-sub);
       }
 
       .bird-right img {
-        height: 32px;
+        height: 26px;
         opacity: 0.96;
         filter: drop-shadow(0 4px 10px rgba(15, 23, 42, 0.9));
       }
 
       .title-bar {
         font-family: "Georgia", "Times New Roman", serif;
-        font-size: 22px;
+        font-size: 20px;
         letter-spacing: 0.06em;
-        padding: 10px 14px;
+        padding: 8px 12px;
         border-radius: 16px;
         background: rgba(15, 23, 42, 0.82);
         border: 1px solid rgba(148, 163, 184, 0.45);
         text-align: center;
-        margin-bottom: 18px;
+        margin-bottom: 12px;
       }
 
       .content-row {
         flex: 1;
         display: flex;
-        gap: 20px;
+        gap: 16px;
         min-height: 0;
       }
 
@@ -103,18 +105,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 16px;
+        padding: 10px;
       }
 
-      /* Fixed 640x480 (4:3) preview box */
       .photo-inner {
-        width: 640px;
-        height: 480px;
-        max-width: 100%;
-        max-height: 100%;
+        width: 100%;
+        max-width: 580px;
         aspect-ratio: 4 / 3;
-        margin: 0 auto;
-        border-radius: 18px;
+        border-radius: 16px;
         background: radial-gradient(circle at top, #020617, #00010a 70%);
         border: 1px solid rgba(148, 163, 184, 0.45);
         display: flex;
@@ -124,7 +122,7 @@
         color: var(--text-sub);
         font-size: 12px;
         text-align: center;
-        padding: 0 14px;
+        padding: 0 10px;
       }
 
       .photo-inner img {
@@ -138,54 +136,52 @@
         border-radius: 18px;
         background: rgba(8, 25, 53, 0.96);
         border: 1px solid rgba(148, 163, 184, 0.4);
-        padding: 16px 18px 14px;
+        padding: 12px 14px 10px;
         display: flex;
         flex-direction: column;
       }
 
       .side-title {
         font-family: "Georgia", "Times New Roman", serif;
-        font-size: 16px;
-        margin-bottom: 8px;
+        font-size: 15px;
+        margin-bottom: 6px;
       }
 
       .side-list {
-        margin: 4px 0 16px;
+        margin: 2px 0 10px;
         padding-left: 18px;
-        font-size: 13px;
+        font-size: 12px;
         color: var(--text-sub);
         line-height: 1.4;
       }
 
-      .side-list li {
-        margin-bottom: 4px;
-      }
+      .side-list li { margin-bottom: 4px; }
 
       .limit-message {
-        font-size: 12px;
+        font-size: 11px;
         color: #fecaca;
         background: rgba(127, 29, 29, 0.25);
         border-radius: 10px;
-        padding: 8px 10px;
-        margin-bottom: 10px;
+        padding: 6px 8px;
+        margin-bottom: 8px;
       }
 
       .button-row {
         display: flex;
         justify-content: center;
-        gap: 18px;
-        margin-top: 12px;
-        margin-bottom: 6px;
+        gap: 12px;
+        margin-top: 8px;
+        margin-bottom: 4px;
       }
 
       .btn {
-        min-width: 150px;
-        padding: 10px 16px;
+        min-width: 130px;
+        padding: 8px 14px;
         border-radius: 999px;
         border: 1px solid rgba(148, 163, 184, 0.7);
         background: radial-gradient(circle at top, rgba(148, 163, 255, 0.25), rgba(15, 23, 42, 0.95));
         color: var(--text-main);
-        font-size: 13px;
+        font-size: 12px;
         text-align: center;
         text-decoration: none;
       }
@@ -202,9 +198,22 @@
 
       .footer-line {
         margin-top: auto;
-        font-size: 11px;
+        font-size: 10px;
         color: #d1e0ff;
         text-align: center;
+      }
+
+      @media (max-width: 900px) {
+        .frame {
+          height: auto;
+          max-height: none;
+        }
+        .content-row {
+          flex-direction: column;
+        }
+        .photo-panel {
+          order: -1;
+        }
       }
     </style>
   </head>
@@ -254,10 +263,7 @@
             {% else %}
               <span class="btn btn-disabled">Back to camera</span>
             {% endif %}
-           <a href="{{ url_for('filter_game') }}" class="btn btn-primary">
-              Continue
-           </a>
-
+            <a href="{{ url_for('filter_game') }}" class="btn btn-primary">Continue</a>
           </div>
 
           <div class="footer-line">
