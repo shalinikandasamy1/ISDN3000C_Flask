@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>HKUST Photo Booth – Compare Filters</title>
+    <title>HKUST Photo Booth – Here is your photo, with a fresh look</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
       :root {
@@ -13,6 +13,7 @@
         --text-sub: #c3d0ea;
       }
       * { box-sizing: border-box; }
+
       body {
         margin: 0;
         height: 100vh;
@@ -24,6 +25,7 @@
         color: var(--text-main);
         font-family: "Roboto", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       }
+
       .frame {
         width: min(96vw, 960px);
         height: min(90vh, 640px);
@@ -39,6 +41,7 @@
         display: flex;
         flex-direction: column;
       }
+
       .top-bar {
         display: flex;
         justify-content: space-between;
@@ -58,6 +61,7 @@
         opacity: 0.96;
         filter: drop-shadow(0 4px 10px rgba(15, 23, 42, 0.9));
       }
+
       .title-bar {
         font-family: "Georgia", "Times New Roman", serif;
         font-size: 22px;
@@ -69,66 +73,67 @@
         text-align: center;
         margin-bottom: 18px;
       }
-      .content-row {
-        flex: 1;
-        display: flex;
-        gap: 16px;
-        min-height: 0;
-      }
-      .photo-column {
+
+      .photo-panel {
         flex: 1;
         border-radius: 18px;
-        background: rgba(8, 25, 53, 0.96);
-        border: 1px solid rgba(148, 163, 184, 0.4);
-        padding: 12px 14px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      .column-title {
-        font-size: 14px;
-        margin-bottom: 8px;
-      }
-      .photo-box {
-        width: 100%;
-        max-width: 320px;
-        aspect-ratio: 4 / 3;
-        border-radius: 16px;
-        background: #020617;
-        overflow: hidden;
-        border: 1px solid rgba(148, 163, 184, 0.45);
+        background:
+          radial-gradient(circle at top, rgba(15, 118, 230, 0.3), transparent 65%),
+          linear-gradient(to bottom, #020617, #020617);
+        border: 1px solid rgba(15, 23, 42, 0.9);
+        box-shadow:
+          inset 0 0 0 1px rgba(15, 23, 42, 0.7),
+          0 18px 40px rgba(15, 23, 42, 0.9);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--text-sub);
-        font-size: 12px;
-        text-align: center;
-        padding: 0 10px;
+        padding: 24px;
+        margin-bottom: 16px;
       }
-      .photo-box img {
+
+      /* updated: smaller and wider */
+      .photo-inner {
+        width: 75%;
+        max-width: 420px;
+        aspect-ratio: 4 / 3;   /* was 3 / 4 */
+        margin: 0 auto;
+        border-radius: 18px;
+        background: radial-gradient(circle at top, #020617, #00010a 70%);
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        overflow: hidden;
+        position: relative;
+      }
+      .photo-inner img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
-      .button-row {
-        margin-top: 14px;
-        display: flex;
-        gap: 10px;
-      }
-      .btn {
-        flex: 1;
-        padding: 10px 14px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.7);
-        background: radial-gradient(circle at top, rgba(148, 163, 255, 0.25), rgba(15, 23, 42, 0.95));
-        color: var(--text-main);
-        font-size: 13px;
+
+      .with-filter-label {
         text-align: center;
-        text-decoration: none;
+        font-size: 16px;
+        margin-bottom: 10px;
+        font-family: "Georgia", "Times New Roman", serif;
       }
-      .btn-primary {
-        border-color: rgba(56, 189, 248, 0.9);
-        background: radial-gradient(circle at top, rgba(56, 189, 248, 0.3), rgba(15, 23, 42, 0.98));
+
+      .bottom-actions {
+        margin-top: auto;
+        display: flex;
+        justify-content: center;
+      }
+
+      .btn-wide {
+        display: inline-block;
+        width: 100%;
+        max-width: 480px;
+        padding: 10px 24px;
+        border-radius: 999px;
+        text-decoration: none;
+        border: 1px solid rgba(56,189,248,0.9);
+        color: var(--text-main);
+        background: radial-gradient(circle at top, rgba(56,189,248,0.3), rgba(15,23,42,0.98));
+        font-size: 14px;
+        text-align: center;
       }
     </style>
   </head>
@@ -146,33 +151,22 @@
 
       <div class="title-bar">Choose your final look</div>
 
-      <div class="content-row">
-        <div class="photo-column">
-          <div class="column-title">Original colours</div>
-          <div class="photo-box">
-            {% if original_url %}
-              <img src="{{ original_url }}" alt="Original photo">
-            {% else %}
-              Original photo will appear here once a picture is taken.
-            {% endif %}
-          </div>
-        </div>
+      <div class="with-filter-label">With filter</div>
 
-        <div class="photo-column">
-          <div class="column-title">With filter</div>
-          <div class="photo-box">
-            {% if filtered_url %}
-              <img src="{{ filtered_url }}" alt="Filtered photo">
-            {% else %}
-              Apply a filter using the button on the device, then return to this screen.
-            {% endif %}
-          </div>
+      <div class="photo-panel">
+        <div class="photo-inner">
+          {% if filtered_url %}
+            <img src="{{ filtered_url }}" alt="Filtered photo">
+          {% elif photo_url %}
+            <img src="{{ photo_url }}" alt="Photo">
+          {% endif %}
         </div>
       </div>
 
-      <div class="button-row">
-        <a href="{{ url_for('did_you_know') }}" class="btn">Keep original</a>
-        <a href="{{ url_for('did_you_know') }}" class="btn btn-primary">Use filtered photo</a>
+      <div class="bottom-actions">
+        <a href="{{ url_for('gallery') }}" class="btn-wide">
+          Use filtered photo
+        </a>
       </div>
     </div>
   </body>

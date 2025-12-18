@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Download your HKUST photo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      :root {
+        --bg: #041124;
+        --panel: #071a33;
+        --text-main: #f9fbff;
+        --text-sub: #c3d0ea;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:
+          radial-gradient(circle at top, #0b2750 0, #041124 55%, #020712 100%);
+        color: var(--text-main);
+        font-family: "Roboto", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      }
+      .frame {
+        width: min(96vw, 960px);
+        height: min(90vh, 640px);
+        border-radius: 24px;
+        padding: 18px 22px 20px;
+        background:
+          radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 55%),
+          radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.16), transparent 55%),
+          #020815;
+        box-shadow:
+          0 24px 70px rgba(0, 0, 0, 0.9),
+          0 0 0 1px rgba(148, 163, 184, 0.28);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .title {
+        font-family: "Georgia", "Times New Roman", serif;
+        font-size: 22px;
+        margin-bottom: 12px;
+        text-align: center;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: var(--text-sub);
+        margin-bottom: 18px;
+        text-align: center;
+      }
+      .photo-box {
+        width: 100%;
+        max-width: 360px;
+        aspect-ratio: 4 / 3;
+        border-radius: 16px;
+        background: #020617;
+        overflow: hidden;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .photo-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .btn {
+        margin-top: 18px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        background: radial-gradient(circle at top, rgba(148, 163, 255, 0.25), rgba(15, 23, 42, 0.95));
+        color: var(--text-main);
+        font-size: 13px;
+        text-decoration: none;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="title">Your HKUST photo</div>
+      <div class="subtitle">
+        Tap and hold the image to save it, or use the button below.
+      </div>
+      <div class="photo-box">
+        <img src="{{ img_url }}" alt="HKUST photo">
+      </div>
+      <a href="{{ img_url }}" download class="btn">Download photo</a>
+    </div>
+  </body>
+</html>
