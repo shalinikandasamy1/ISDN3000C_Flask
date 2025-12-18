@@ -1,15 +1,21 @@
 import os
 import json
+import time
+import threading
 from collections import defaultdict
 from flask import Flask, render_template, send_from_directory, redirect, url_for
+
+import style_filter  # your style_filter.py
 
 app = Flask(__name__)
 
 PHOTO_DIR = "photos"
 PHOTO_BW_DIR = "photos_bw"
 PHOTO_VINTAGE_DIR = "photos_vintage"
+STYLE_OUTPUT_DIR = "photos_style"
 
 SESSION_FILE = "session_photos.json"
+STYLE_STATUS_FILE = "style_latest.json"
 MAX_RETAKES = 3
 
 
@@ -101,6 +107,46 @@ def add_session_photo(filename):
     return len(names)
 
 
+# ---- style-transfer status helpers (backend-only) ----
+
+def save_style_status(state, filename=None, phase=None):
+    data = {"state": state, "filename": filename, "phase": phase, "ts": time.time()}
+    with open(STYLE_STATUS_FILE, "w") as f:
+        json.dump(data, f)
+
+
+def load_style_status():
+    if not os.path.exists(STYLE_STATUS_FILE):
+        return {"state": "idle", "filename": None, "phase": None}
+    try:
+        with open(STYLE_STATUS_FILE, "r") as f:
+            return json.load(f)
+    except Exception:
+        return {"state": "idle", "filename": None, "phase": None}
+
+
+def start_style_job_for_latest():
+    base_name = get_latest_photo()
+    if not base_name:
+        return
+
+    content_path = os.path.join(PHOTO_DIR, base_name)
+    out_name = os.path.splitext(base_name)[0] + "_style.jpg"
+
+    def job():
+        save_style_status("running", out_name, phase="loading")
+        try:
+            style_filter.run_style_on_latest(content_path, out_name)
+            save_style_status("done", out_name, phase="finished")
+        except Exception as e:
+            print("Style job failed:", e)
+            save_style_status("error", out_name, phase="error")
+
+    threading.Thread(target=job, daemon=True).start()
+
+
+# ---- routes ----
+
 @app.route("/")
 def welcome():
     return render_template("welcome.html")
@@ -156,6 +202,10 @@ def preview_retake():
 def filter_game():
     latest = get_latest_photo()
     photo_url = url_for("photos_file", filename=latest) if latest else None
+
+    # kick off style transfer in background for the latest photo
+    start_style_job_for_latest()
+
     return render_template("filters.html", photo_url=photo_url)
 
 
@@ -163,9 +213,11 @@ def filter_game():
 def compare():
     base_name = get_latest_photo()
     if not base_name:
-        return render_template("compare.html",
-                               original_url=None,
-                               filtered_url=None)
+        return render_template(
+            "compare.html",
+            original_url=None,
+            filtered_url=None
+        )
 
     original_url = url_for("photos_file", filename=base_name)
 
@@ -189,6 +241,38 @@ def did_you_know():
     return render_template("didyouknow.html")
 
 
+# waiting page for style result
+@app.route("/art_wait")
+def art_wait():
+    status = load_style_status()
+    ready = status.get("state") == "done"
+    return render_template("art_wait.html", ready=ready)
+
+
+@app.route("/art_wait/continue")
+def art_wait_continue():
+    status = load_style_status()
+    if status.get("state") != "done":
+        return redirect(url_for("art_wait"))
+    return redirect(url_for("art_result"))
+
+
+@app.route("/art_result")
+def art_result():
+    # always show the latest stylized file in photos_style
+    style_files = [
+        f for f in os.listdir(STYLE_OUTPUT_DIR)
+        if f.endswith(".jpg")
+    ]
+    if not style_files:
+        return render_template("art_result.html", style_url=None)
+
+    style_files.sort()
+    latest_style = style_files[-1]
+    style_url = url_for("photos_style_file", filename=latest_style)
+    return render_template("art_result.html", style_url=style_url)
+
+
 @app.route("/gallery")
 def gallery():
     groups = load_groups()
@@ -208,6 +292,11 @@ def photos_bw_file(filename):
 @app.route("/photos_vintage/<path:filename>")
 def photos_vintage_file(filename):
     return send_from_directory(PHOTO_VINTAGE_DIR, filename)
+
+
+@app.route("/photos_style/<path:filename>")
+def photos_style_file(filename):
+    return send_from_directory(STYLE_OUTPUT_DIR, filename)
 
 
 if __name__ == "__main__":

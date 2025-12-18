@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Your HKUST Artwork</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- reuse the same CSS block you use in compare.html / preview.html -->
+  </head>
+  <body>
+    <div class="frame">
+      <div class="top-bar">
+        <div class="logo-left">
+          <img src="{{ url_for('static', filename='img/hkust_logo.png') }}" alt="HKUST logo">
+          <div class="logo-text">HKUST ART LAB</div>
+        </div>
+        <div class="bird-right">
+          <img src="{{ url_for('static', filename='img/red_bird.png') }}" alt="Red Bird sculpture">
+        </div>
+      </div>
+
+      <div class="title-bar">You’ve been carved into HKUST.</div>
+
+      <div class="content-row">
+        <div class="photo-column">
+          <div class="column-title">Your stylized portrait</div>
+          <div class="photo-box">
+            {% if style_url %}
+              <img src="{{ style_url }}" alt="Stylized HKUST artwork">
+            {% else %}
+              Stylized image not found.
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="button-row">
+        <a href="{{ url_for('gallery') }}" class="btn">Back to gallery</a>
+      </div>
+    </div>
+  </body>
+</html>
