@@ -91,12 +91,19 @@
       }
       .photo-box {
         width: 100%;
-        max-width: 260px;
-        aspect-ratio: 3 / 4;
+        max-width: 320px;
+        aspect-ratio: 4 / 3;
         border-radius: 16px;
         background: #020617;
         overflow: hidden;
         border: 1px solid rgba(148, 163, 184, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-sub);
+        font-size: 12px;
+        text-align: center;
+        padding: 0 10px;
       }
       .photo-box img {
         width: 100%;
@@ -145,6 +152,8 @@
           <div class="photo-box">
             {% if original_url %}
               <img src="{{ original_url }}" alt="Original photo">
+            {% else %}
+              Original photo will appear here once a picture is taken.
             {% endif %}
           </div>
         </div>
@@ -154,6 +163,8 @@
           <div class="photo-box">
             {% if filtered_url %}
               <img src="{{ filtered_url }}" alt="Filtered photo">
+            {% else %}
+              Apply a filter using the button on the device, then return to this screen.
             {% endif %}
           </div>
         </div>

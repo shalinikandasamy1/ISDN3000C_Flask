@@ -172,7 +172,7 @@
 
       .button-row {
         display: flex;
-        justify-content: center;   /* center in panel */
+        justify-content: center;
         gap: 18px;
         margin-top: 12px;
         margin-bottom: 6px;
@@ -193,6 +193,11 @@
       .btn-primary {
         border-color: rgba(56, 189, 248, 0.9);
         background: radial-gradient(circle at top, rgba(56, 189, 248, 0.3), rgba(15, 23, 42, 0.98));
+      }
+
+      .btn-disabled {
+        opacity: 0.4;
+        pointer-events: none;
       }
 
       .footer-line {
@@ -246,8 +251,13 @@
           <div class="button-row">
             {% if not max_reached %}
               <a href="{{ url_for('preview_retake') }}" class="btn">Back to camera</a>
+            {% else %}
+              <span class="btn btn-disabled">Back to camera</span>
             {% endif %}
-            <a href="{{ url_for('choose_photo') }}" class="btn btn-primary">Continue</a>
+           <a href="{{ url_for('filter_game') }}" class="btn btn-primary">
+              Continue
+           </a>
+
           </div>
 
           <div class="footer-line">
