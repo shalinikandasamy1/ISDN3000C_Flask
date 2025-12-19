@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>HKUST Photo Booth – Email my photo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      :root {
+        --bg: #041124;
+        --panel: #071a33;
+        --text-main: #f9fbff;
+        --text-sub: #c3d0ea;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:
+          radial-gradient(circle at top, #0b2750 0, #041124 55%, #020712 100%);
+        color: var(--text-main);
+        font-family: "Roboto", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      }
+      .frame {
+        width: min(96vw, 480px);
+        height: min(70vh, 360px);
+        border-radius: 24px;
+        padding: 22px 26px;
+        background:
+          radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 55%),
+          radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.16), transparent 55%),
+          #020815;
+        box-shadow:
+          0 24px 70px rgba(0, 0, 0, 0.9),
+          0 0 0 1px rgba(148, 163, 184, 0.28);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+      }
+      .title {
+        font-family: "Georgia", "Times New Roman", serif;
+        font-size: 22px;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: var(--text-sub);
+        margin-bottom: 18px;
+        text-align: center;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      input[type="email"] {
+        padding: 10px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        background: rgba(15, 23, 42, 0.9);
+        color: var(--text-main);
+        font-size: 14px;
+        outline: none;
+      }
+      input[type="email"]::placeholder {
+        color: var(--text-sub);
+      }
+      .btn {
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(56, 189, 248, 0.9);
+        background: radial-gradient(circle at top, rgba(56, 189, 248, 0.3), rgba(15, 23, 42, 0.98));
+        color: var(--text-main);
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .thanks {
+        font-size: 13px;
+        color: var(--text-sub);
+        text-align: center;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      {% if not submitted %}
+        <div class="title">Email my HKUST photo</div>
+        <div class="subtitle">
+          Enter your email and our team will send your photos after the event.
+        </div>
+        <form method="post" action="{{ url_for('email_share') }}">
+          <input type="email" name="email" placeholder="name@example.com" required>
+          <button type="submit" class="btn">Submit</button>
+        </form>
+      {% else %}
+        {% if sent_ok %}
+          <div class="title">Thank you!</div>
+          <div class="subtitle">
+            Your email has been recorded. We’ll send your photos as soon as they’re ready.
+          </div>
+        {% else %}
+          <div class="title">Oops!</div>
+          <div class="subtitle">
+            Something went wrong sending your email. Please try again or ask a staff member for help.
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </body>
+</html>

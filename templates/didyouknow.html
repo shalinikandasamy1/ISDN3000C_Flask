@@ -10,6 +10,7 @@
         --panel: #071a33;
         --text-main: #f9fbff;
         --text-sub: #c3d0ea;
+        --accent: #f97316;
       }
       * { box-sizing: border-box; }
       body {
@@ -24,51 +25,174 @@
         font-family: "Roboto", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       }
       .frame {
-        width: min(96vw, 960px);
-        height: min(90vh, 640px);
+        width: min(96vw, 1040px);
+        height: min(92vh, 680px);
         border-radius: 24px;
         padding: 18px 22px 20px;
         background:
-          radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 55%),
-          radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.16), transparent 55%),
+          radial-gradient(circle at top left, rgba(37, 99, 235, 0.18), transparent 55%),
+          radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.18), transparent 55%),
           #020815;
         box-shadow:
           0 24px 70px rgba(0, 0, 0, 0.9),
           0 0 0 1px rgba(148, 163, 184, 0.28);
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        gap: 20px;
+      }
+      @media (max-width: 900px) {
+        .frame {
+          grid-template-columns: 1fr;
+          height: auto;
+        }
+      }
+
+      /* 9:16 portrait-style image area, like camera/preview */
+      .image-panel {
+        position: relative;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #020817;
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
       }
+      .image-panel::before {
+        content: "";
+        display: block;
+        width: 100%;
+        padding-top: 177.78%;  /* 9:16 ratio = 9/16 * 100 */
+      }
+      .image-panel img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .image-overlay {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at bottom, rgba(15,23,42,0.0), rgba(15,23,42,0.35));
+      }
+
+      .content-panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 8px 4px 4px;
+      }
+
       .title {
         font-family: "Georgia", "Times New Roman", serif;
         font-size: 22px;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
       }
-      .subtitle {
+      .tagline {
         font-size: 13px;
         color: var(--text-sub);
-        margin-bottom: 18px;
-        text-align: center;
+        margin-bottom: 14px;
+      }
+
+      .fact-section {
+        margin-bottom: 10px;
+      }
+      .fact-heading {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #93c5fd;
+        margin-bottom: 3px;
+      }
+      .fact-body {
+        font-size: 13px;
+        line-height: 1.4;
+        color: var(--text-main);
+      }
+
+      .prompt {
+        margin: 12px 0 10px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--accent);
+      }
+
+      .buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 4px;
       }
       .btn {
         padding: 10px 18px;
         border-radius: 999px;
         border: 1px solid rgba(148, 163, 184, 0.7);
-        background: radial-gradient(circle at top, rgba(148, 163, 255, 0.25), rgba(15, 23, 42, 0.95));
+        background: radial-gradient(circle at top, rgba(148, 163, 255, 0.3), rgba(15, 23, 42, 0.96));
         color: var(--text-main);
         font-size: 13px;
         text-decoration: none;
+        cursor: pointer;
+        transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.8);
+      }
+      .btn-primary {
+        border-color: rgba(249, 115, 22, 0.8);
+        background: radial-gradient(circle at top, rgba(249, 115, 22, 0.85), rgba(124, 45, 18, 0.98));
+      }
+      .btn-secondary {
+        background: radial-gradient(circle at top, rgba(148, 163, 184, 0.2), rgba(15, 23, 42, 0.96));
       }
     </style>
   </head>
   <body>
     <div class="frame">
-      <div class="title">Did you know?</div>
-      <div class="subtitle">
-        While you wait, our HKUST Art Lab can turn your photo into a unique stylized artwork.
+      <!-- Left: image, 9:16 ratio -->
+      <div class="image-panel">
+        <img src="{{ url_for('static', filename='img/hkust_carving.png') }}"
+             alt="HKUST red bird sundial and Circle of Time carving">
+        <div class="image-overlay"></div>
       </div>
-      <a href="{{ url_for('art_result') }}" class="btn">Continue to HKUST Art Lab</a>
+
+      <!-- Right: facts + CTA -->
+      <div class="content-panel">
+        <div>
+          <div class="title">Did you know?</div>
+          <div class="tagline">
+            Under HKUST’s towering red “bird” sundial stands a 7‑meter stone carving showing 39 ancient Chinese inventions – from iron plows and seismographs to early rockets.
+          </div>
+
+          <div class="fact-section">
+            <div class="fact-heading">Purpose</div>
+            <div class="fact-body">
+              Created in 1991 by artist Alan Chung Hung Smith, it celebrates China’s long tradition of innovation at a brand‑new technology university.
+            </div>
+          </div>
+
+          <div class="fact-section">
+            <div class="fact-heading">Symbolism</div>
+            <div class="fact-body">
+              The “Circle of Time” design links ancient genius to modern discovery, reminding HKUST students that they are part of that continuum every day.
+            </div>
+          </div>
+
+          <div class="prompt">
+            Do you want to try our “Carve into HKUST innovation” filter on your photo?
+          </div>
+        </div>
+
+        <div class="buttons">
+          <a href="{{ url_for('finalize') }}" class="btn btn-primary">
+            Yes, apply the filter
+          </a>
+          <a href="{{ url_for('qr_page') }}" class="btn btn-secondary">
+            No, thankyou
+          </a>
+        </div>
+      </div>
     </div>
   </body>
 </html>

@@ -61,7 +61,7 @@ def get_vgg_model():
     outputs = [vgg.get_layer(name).output for name in STYLE_LAYERS + [CONTENT_LAYER]]
     return tf.keras.Model(vgg.input, outputs)
 
-# ------------ core API ------------
+# ------------ core logic------------
 
 def run_style_transfer(content_path, style_path, output_path):
     content_image = load_img(content_path)

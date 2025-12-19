@@ -2,44 +2,207 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Photos grouped by person</title>
+    <title>HKUST Photo Booth – Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-      body { font-family: system-ui, sans-serif; margin: 20px; }
-      h1 { margin-bottom: 20px; }
-      .person-block { margin-bottom: 40px; }
-      .person-block h2 { margin-bottom: 10px; }
+      :root {
+        --bg: #041124;
+        --panel: #071a33;
+        --accent: #0ea5e9;
+        --text-main: #f9fbff;
+        --text-sub: #c3d0ea;
+      }
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:
+          radial-gradient(circle at top, #0b2750 0, #041124 55%, #020712 100%);
+        color: var(--text-main);
+        font-family: "Roboto", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      }
+
+      .frame {
+        width: min(96vw, 1040px);
+        height: min(92vh, 680px);
+        border-radius: 24px;
+        padding: 18px 22px 20px;
+        background:
+          radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 55%),
+          radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.16), transparent 55%),
+          #020815;
+        box-shadow:
+          0 24px 70px rgba(0, 0, 0, 0.9),
+          0 0 0 1px rgba(148, 163, 184, 0.28);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .logo-left { display: flex; align-items: center; gap: 10px; }
+      .logo-left img { height: 26px; }
+      .logo-text {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--text-sub);
+      }
+      .bird-right img {
+        height: 32px;
+        opacity: 0.96;
+        filter: drop-shadow(0 4px 10px rgba(15, 23, 42, 0.9));
+      }
+
+      .title-bar {
+        font-family: "Georgia", "Times New Roman", serif;
+        font-size: 22px;
+        letter-spacing: 0.06em;
+        padding: 10px 14px;
+        border-radius: 16px;
+        background: rgba(15, 23, 42, 0.82);
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        text-align: center;
+        margin-bottom: 12px;
+      }
+
+      .subtitle {
+        font-size: 13px;
+        color: var(--text-sub);
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .content-scroll {
+        flex: 1;
+        margin-top: 6px;
+        border-radius: 18px;
+        background: rgba(8, 25, 53, 0.96);
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        padding: 14px 16px;
+        overflow-y: auto; /* scrollable */
+      }
+
+      .person-block {
+        margin-bottom: 24px;
+      }
+      .person-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #e5edff;
+      }
+
       .thumbs {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
       }
-      .thumbs a {
-        display: inline-block;
-        border: 1px solid #ccc;
-        padding: 4px;
-        background: #fafafa;
+      .thumb {
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        background: #020617;
+        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+        cursor: pointer;
       }
-      .thumbs img {
-        height: 150px;
-        object-fit: cover;
+      .thumb img {
         display: block;
+        height: 120px;
+        width: 90px;
+        object-fit: cover;
+      }
+
+      .footer-row {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
+      .footer-text {
+        font-size: 11px;
+        color: #d1e0ff;
+      }
+
+      .btn {
+        padding: 8px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        background: radial-gradient(circle at top, rgba(56, 189, 248, 0.25), rgba(15, 23, 42, 0.95));
+        color: var(--text-main);
+        font-size: 13px;
+        text-decoration: none;
+        cursor: pointer;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .btn.primary {
+        border-color: rgba(56, 189, 248, 0.9);
+        background: radial-gradient(circle at top, rgba(56, 189, 248, 0.3), rgba(15, 23, 42, 0.98));
+      }
+
+      @media (max-width: 768px) {
+        .thumb img { height: 100px; width: 75px; }
+        .footer-row { flex-direction: column; align-items: flex-start; }
       }
     </style>
   </head>
   <body>
-    <h1>Photos grouped by person</h1>
-
-    {% for person, files in groups.items() %}
-      <div class="person-block">
-        <h2>{{ person }}</h2>
-        <div class="thumbs">
-          {% for fname in files %}
-            <a href="/photos/{{ fname }}" target="_blank">
-              <img src="/photos/{{ fname }}" alt="{{ fname }}">
-            </a>
-          {% endfor %}
+    <div class="frame">
+      <div class="top-bar">
+        <div class="logo-left">
+          <img src="{{ url_for('static', filename='img/hkust_logo.png') }}" alt="HKUST logo">
+          <div class="logo-text">HKUST PHOTO BOOTH</div>
+        </div>
+        <div class="bird-right">
+          <img src="{{ url_for('static', filename='img/red_bird.png') }}" alt="Red Bird sculpture">
         </div>
       </div>
-    {% endfor %}
+
+      <div class="title-bar">Your HKUST Gallery</div>
+      <div class="subtitle">
+        Scroll through the photos captured. Tap any image to view it larger in a new tab.
+      </div>
+
+      <div class="content-scroll">
+        {% for person, files in groups.items() %}
+          <div class="person-block">
+            <div class="person-title">{{ person }}</div>
+            <div class="thumbs">
+              {% for fname in files %}
+                <a href="{{ url_for('photos_file', filename=fname) }}" target="_blank" class="thumb">
+                  <img src="{{ url_for('photos_file', filename=fname) }}" alt="{{ fname }}">
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+
+        {% if not groups %}
+          <div class="person-title">No photos yet</div>
+          <p style="font-size: 13px; color: var(--text-sub);">
+            Here is a gallery of HKUST memories.
+          </p>
+        {% endif %}
+      </div>
+
+      <div class="footer-row">
+        <div class="footer-text">
+          Our grouping page can sort by the number of people present in the picture.
+        </div>
+        <a href="{{ url_for('did_you_know') }}" class="btn primary">
+          Continue 
+        </a>
+      </div>
+    </div>
   </body>
 </html>

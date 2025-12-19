@@ -97,15 +97,17 @@
         padding: 16px;
       }
 
+      /* wide aspect ratio, like preview */
       .photo-inner {
         width: 90%;
-        max-width: 360px;
-        aspect-ratio: 3 / 4;
+        max-width: 480px;
+        aspect-ratio: 4 / 3;  /* change if your preview uses a different ratio */
         margin: 0 auto;
         border-radius: 18px;
         background: radial-gradient(circle at top, #020617, #00010a 70%);
         border: 1px solid rgba(148, 163, 184, 0.45);
         overflow: hidden;
+        position: relative;
       }
       .photo-inner img {
         width: 100%;
@@ -214,7 +216,7 @@
         <div class="photo-panel">
           <div class="photo-inner">
             {% if photo_url %}
-              <img src="{{ photo_url }}" alt="Chosen photo">
+              <img src="{{ photo_url }}" alt="Original photo">
             {% endif %}
           </div>
         </div>
