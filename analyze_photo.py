@@ -35,7 +35,9 @@ def analyze_photo(filename):
     if num_faces == 0:
         person_label = "unknown"
     elif num_faces == 1:
-        person_label = "person 1"
+        person_label = "1 Person"
+    elif num_faces == 2:
+        person_label = "2 People"
     else:
         person_label = "group"
 
