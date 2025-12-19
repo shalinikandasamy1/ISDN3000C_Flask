@@ -308,4 +308,4 @@ def photos_style_file(filename):
     return send_from_directory(STYLE_OUTPUT_DIR, filename)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8965, debug=True)
+    app.run(host="0.0.0.0", port=8900, debug=True)
